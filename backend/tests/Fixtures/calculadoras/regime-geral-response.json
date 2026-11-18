@@ -1,0 +1,54 @@
+{
+  "objetos": [
+    {
+      "nObj": 1,
+      "estadoItem": "CALCULO_SIMULADO",
+      "tribCalc": { "IBSCBS": { "CST": "200", "cClassTrib": "200003", "gIBSCBS": {
+        "vBC": "100.00",
+        "gIBSUF": { "pIBSUF": "0.05", "vIBSUF": "0.00" },
+        "gIBSMun": { "pIBSMun": "0.05", "vIBSMun": "0.00" },
+        "vIBS": "0.00",
+        "gCBS": { "pCBS": "8.80", "vCBS": "0.00" }
+      } } }
+    },
+    {
+      "nObj": 2,
+      "estadoItem": "CALCULO_SIMULADO",
+      "tribCalc": {
+        "IS": { "vIS": "15.00" },
+        "IBSCBS": { "CST": "000", "cClassTrib": "000001", "gIBSCBS": {
+          "vBC": "165.00",
+          "gIBSUF": { "pIBSUF": "0.05", "vIBSUF": "0.08" },
+          "gIBSMun": { "pIBSMun": "0.05", "vIBSMun": "0.08" },
+          "vIBS": "0.16",
+          "gCBS": { "pCBS": "8.80", "vCBS": "14.52" }
+        } }
+      }
+    },
+    {
+      "nObj": 3,
+      "estadoItem": "CALCULO_SIMULADO",
+      "tribCalc": { "IBSCBS": { "CST": "200", "cClassTrib": "200028", "gIBSCBS": {
+        "vBC": "1200.00",
+        "gIBSUF":  { "pIBSUF": "0.05",  "gRed": { "pRedAliq": "60.00", "pAliqEfet": "0.02" }, "vIBSUF": "0.24" },
+        "gIBSMun": { "pIBSMun": "0.05", "gRed": { "pRedAliq": "60.00", "pAliqEfet": "0.02" }, "vIBSMun": "0.24" },
+        "vIBS": "0.48",
+        "gCBS":    { "pCBS": "8.80",    "gRed": { "pRedAliq": "60.00", "pAliqEfet": "3.52" }, "vCBS": "42.24" }
+      } } }
+    },
+    {
+      "nObj": 4,
+      "estadoItem": "INCONSISTENCIA_ENTRADA",
+      "erros": [{
+        "code": "REG-011",
+        "title": "NCM não vinculada",
+        "pointer": "#/itens/3/ncm",
+        "detail": "NCM de código 02013000 não vinculada à Classificação Tributária de código 200035 (CBS e IBS)"
+      }]
+    }
+  ],
+  "total": { "tribCalc": {
+    "ISTot": { "vIS": "15.00" },
+    "IBSCBSTot": { "vBCIBSCBS": "1465.00", "gIBS": { "vIBS": "0.64" }, "gCBS": { "vCBS": "56.76" } }
+  } }
+}

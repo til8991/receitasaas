@@ -1,0 +1,41 @@
+{
+  "oper": { "data": "2027-03-15", "tpDoc": "55", "CRT": "1" },
+  "objetos": [
+    {
+      "nObj": 1,
+      "estadoItem": "CALCULADO",
+      "tribCalc": {
+        "vRBSNitem": "950.00",
+        "tpRBSN": 1,
+        "tpRBSNDescricao": "Receita bruta - interna",
+        "vBC": "950.00",
+        "pIBSSN": "1.2500",
+        "vIBSSN": "11.88",
+        "vIBSPendSusp": "0.00",
+        "pCBSSN": "2.7500",
+        "vCBSSN": "26.13",
+        "vCBSPendSusp": "0.00",
+        "totalItem": "38.01"
+      }
+    },
+    {
+      "nObj": 2,
+      "estadoItem": "NAO_CALCULADO",
+      "tribCalc": { "vRBSNitem": "100.00", "tpRBSN": 1, "tpRBSNDescricao": "Receita bruta - interna" }
+    },
+    {
+      "nObj": 3,
+      "estadoItem": "INCONSISTENCIA_ENTRADA",
+      "erros": [{ "code": "VSN-001", "title": "Campo obrigatório", "pointer": "#/itens/2/cClassTrib", "detail": "cClassTrib não informado" }]
+    }
+  ],
+  "total": {
+    "vRBSNtot": "1050.00",
+    "vBC": "950.00",
+    "vIBSSNtot": "11.88",
+    "vIBSSNtotPendSusp": "0.00",
+    "vCBSSNtot": "26.13",
+    "vCBSSNtotPendSusp": "0.00",
+    "totalTributos": "38.01"
+  }
+}
