@@ -76,8 +76,8 @@ class AuthController extends Controller
         $keySource = 'login-fail:'.$email.'|'.self::clientNetwork((string) $request->ip());
         $keyAccount = 'login-fail-account:'.$email;
 
-        if (RateLimiter::tooManyAttempts($keySource, 5) || RateLimiter::tooManyAttempts($keyAccount, 100)) {
-            $seconds = max(RateLimiter::availableIn($keySource), RateLimiter::availableIn($keyAccount));
+        if (RateLimiter::tooManyAttempts($keySource, 5)) {
+            $seconds = RateLimiter::availableIn($keySource);
             throw ValidationException::withMessages([
                 'email' => "Muitas tentativas de login. Tente novamente em {$seconds} segundos.",
             ])->status(429);
@@ -90,10 +90,18 @@ class AuthController extends Controller
             if ($accountFailures >= 10) {
                 Log::warning('auth.login_failures', ['email_hash' => hash('sha256', $email), 'failures_last_hour' => $accountFailures]);
             }
+            // The account-wide cap only applies to WRONG passwords, so it slows a distributed attack
+            // without ever blocking the correct password from a source that is not blocked.
+            if ($accountFailures > 100) {
+                throw ValidationException::withMessages([
+                    'email' => 'Muitas tentativas de login nesta conta. Tente novamente mais tarde.',
+                ])->status(429);
+            }
             throw ValidationException::withMessages(['email' => 'E-mail ou senha inválidos.']);
         }
 
         RateLimiter::clear($keySource);
+        RateLimiter::clear($keyAccount);
 
         return response()->json($this->tokenPayload($user));
     }
