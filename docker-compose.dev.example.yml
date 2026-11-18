@@ -1,0 +1,14 @@
+# Local development only: exposes the calculators' Swagger UI on localhost.
+# Copy to docker-compose.override.yml (gitignored). NEVER use in production:
+# the calculator APIs have no authentication.
+#   Regular: http://localhost:18080/api/swagger-ui.html
+#   Simples: http://localhost:18082/api/swagger-ui.html
+services:
+  calc-regular:
+    ports: ["127.0.0.1:18080:8080"]
+    networks: [calc, calc-dev]
+  calc-simples:
+    ports: ["127.0.0.1:18082:8082"]
+    networks: [calc, calc-dev]
+networks:
+  calc-dev: {}

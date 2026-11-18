@@ -1,0 +1,6 @@
+[submodule "services/calculadora-rtc-regime-regular"]
+	path = services/calculadora-rtc-regime-regular
+	url = https://github.com/ReceitaFederal/calculadora-rtc-regime-regular.git
+[submodule "services/calculadora-rtc-simples-nacional"]
+	path = services/calculadora-rtc-simples-nacional
+	url = https://github.com/ReceitaFederal/calculadora-rtc-simples-nacional.git

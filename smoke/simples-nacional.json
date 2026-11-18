@@ -1,0 +1,18 @@
+{
+  "id": "507f1f77bcf86cd799439011",
+  "versao": "2.0.0",
+  "data": "2027-03-15",
+  "tpDoc": "55",
+  "CRT": "1",
+  "itens": [
+    {
+      "numero": 1,
+      "cAtivSN": "01",
+      "cClassTrib": "000001",
+      "baseCalculo": "950.00",
+      "valorImpostoSeletivo": "0.00",
+      "pIBSSN": "1.25",
+      "pCBSSN": "2.75"
+    }
+  ]
+}

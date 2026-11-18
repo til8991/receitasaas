@@ -1,0 +1,48 @@
+name: receitasass
+
+# Phase 1: only the two official calculators.
+# nginx, php-fpm, mysql and redis are added in Phase 2.
+# The calculators have no authentication, so they publish NO ports: they are reachable only
+# on the internal "calc" network (http://calc-regular:8080, http://calc-simples:8082).
+
+services:
+  calc-regular:
+    build:
+      context: ./services/calculadora-rtc-regime-regular
+      dockerfile: ../../docker/calc-regular/Dockerfile
+    image: receitasass/calc-regular:latest
+    restart: unless-stopped
+    environment:
+      VERSAO_OFFLINE_URL: ${VERSAO_OFFLINE_URL:-https://piloto-cbs.tributos.gov.br/servico/calculadora-consumo/api/calculadora/dados-abertos/versao}
+    networks: [calc]
+    mem_limit: 1g
+
+  calc-simples:
+    build:
+      context: ./services/calculadora-rtc-simples-nacional
+      dockerfile: ../../docker/calc-simples/Dockerfile
+      additional_contexts:
+        regular: ./services/calculadora-rtc-regime-regular
+    image: receitasass/calc-simples:latest
+    restart: unless-stopped
+    environment:
+      VERSAO_AMBIENTE: offline
+    networks: [calc]
+    mem_limit: 1g
+
+  # One-shot smoke test: docker compose --profile smoke run --rm smoke
+  smoke:
+    build: ./docker/smoke
+    image: receitasass/smoke:latest
+    profiles: [smoke]
+    depends_on:
+      calc-regular: { condition: service_healthy }
+      calc-simples: { condition: service_healthy }
+    volumes:
+      - ./scripts/smoke-test.sh:/smoke/smoke-test.sh:ro
+      - ./smoke:/smoke/payloads:ro
+    networks: [calc]
+
+networks:
+  calc:
+    internal: true
