@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="NFe43270311222333000181650010000000991000000999" versao="4.00">
+    <ide><mod>65</mod><nNF>99</nNF><dhEmi>2027-04-01T09:00:00-03:00</dhEmi></ide>
+    <emit><CNPJ>11222333000181</CNPJ></emit>
+    <dest><CPF>52998224725</CPF></dest>
+    <det nItem="1">
+      <prod><xProd>CERVEJA LATA 350ML</xProd><NCM>22030000</NCM><CFOP>5102</CFOP><uCom>UN</uCom><qCom>10</qCom><vProd>100.00</vProd></prod>
+      <imposto><ICMS/></imposto>
+    </det>
+  </infNFe>
+</NFe>

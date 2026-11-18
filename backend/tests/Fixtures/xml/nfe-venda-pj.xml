@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nfeProc xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
+  <NFe>
+    <infNFe Id="NFe43270311222333000181550010000012341000012345" versao="4.00">
+      <ide><cUF>43</cUF><mod>55</mod><serie>1</serie><nNF>1234</nNF><dhEmi>2027-03-10T10:00:00-03:00</dhEmi></ide>
+      <emit><CNPJ>11222333000181</CNPJ><xNome>Mercado Bom Preco LTDA</xNome></emit>
+      <dest><CNPJ>19131243000197</CNPJ><xNome>Cliente PJ</xNome><enderDest><UF>SC</UF></enderDest></dest>
+      <det nItem="1">
+        <prod><cProd>1</cProd><xProd>CERVEJA LATA 350ML</xProd><NCM>22030000</NCM><CFOP>5102</CFOP><uCom>UN</uCom><qCom>100.0000</qCom><vProd>1000.00</vProd><vFrete>50.00</vFrete><vDesc>30.00</vDesc></prod>
+        <imposto><IBSCBS><CST>000</CST><cClassTrib>000001</cClassTrib></IBSCBS></imposto>
+      </det>
+      <det nItem="2">
+        <prod><cProd>2</cProd><xProd>ARROZ 5KG</xProd><NCM>10063021</NCM><CFOP>5102</CFOP><uCom>UN</uCom><qCom>10.0000</qCom><vProd>200.00</vProd></prod>
+        <imposto><IBSCBS><CST>200</CST><cClassTrib>200003</cClassTrib></IBSCBS></imposto>
+      </det>
+    </infNFe>
+  </NFe>
+</nfeProc>

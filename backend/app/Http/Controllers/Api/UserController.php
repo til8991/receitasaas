@@ -16,6 +16,8 @@ class UserController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
+        Gate::authorize('admin');
+
         return response()->json([
             'data' => User::where('office_id', $request->user()->office_id)->orderBy('name')->get(),
         ]);
@@ -56,7 +58,19 @@ class UserController extends Controller
             $this->ensureAnotherAdmin($request, $user);
         }
 
+        $credentialsChanged = isset($data['password'])
+            || (isset($data['email']) && $data['email'] !== $user->email)
+            || (isset($data['role']) && $data['role'] !== $user->role);
+
         $user->update($data);
+
+        // Revoke sessions when credentials or privileges change (keeps the caller's own current token).
+        if ($credentialsChanged) {
+            $current = $request->user()->currentAccessToken();
+            $user->tokens()
+                ->when($user->id === $request->user()->id && $current, fn ($q) => $q->whereKeyNot($current->id))
+                ->delete();
+        }
 
         return response()->json(['data' => $user]);
     }

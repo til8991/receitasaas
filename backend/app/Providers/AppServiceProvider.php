@@ -28,7 +28,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::define('admin', fn (User $user) => $user->isAdmin());
 
-        RateLimiter::for('auth', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
+        // Per IP and per target account, so rotating IPs does not allow brute force on one e-mail.
+        RateLimiter::for('auth', fn (Request $request) => [
+            Limit::perMinute(10)->by('ip|'.$request->ip()),
+            Limit::perMinute(5)->by('email|'.strtolower((string) $request->input('email'))),
+            Limit::perHour(30)->by('email-h|'.strtolower((string) $request->input('email'))),
+        ]);
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(240)->by($request->user()?->id ?: $request->ip()));
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nfeProc xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
+  <NFe>
+    <infNFe Id="NFe43270219131243000197550010000005551000005555" versao="4.00">
+      <ide><mod>55</mod><nNF>555</nNF><dhEmi>2027-02-15T08:00:00-03:00</dhEmi></ide>
+      <emit><CNPJ>19131243000197</CNPJ></emit>
+      <dest><CNPJ>11222333000181</CNPJ><enderDest><UF>RS</UF></enderDest></dest>
+      <det nItem="1">
+        <prod><xProd>CERVEJA FARDO</xProd><NCM>22030000</NCM><CFOP>5102</CFOP><uCom>FD</uCom><qCom>20</qCom><vProd>600.00</vProd></prod>
+      </det>
+    </infNFe>
+  </NFe>
+</nfeProc>

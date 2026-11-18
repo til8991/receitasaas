@@ -24,7 +24,8 @@ class CalculadoraController extends Controller
             try {
                 $status[$client->name()] = ['online' => true, 'versao' => $client->versao()->toArray()];
             } catch (CalculadoraException $e) {
-                $status[$client->name()] = ['online' => false, 'error' => $e->getMessage()];
+                report($e);
+                $status[$client->name()] = ['online' => false, 'error' => 'Calculadora indisponível no momento.'];
             }
         }
 

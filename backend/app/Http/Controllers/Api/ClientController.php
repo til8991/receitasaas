@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRequest;
 use App\Models\Client;
+use App\Models\Office;
+use Illuminate\Support\Facades\DB;
 use App\Services\Billing\BillingGateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -42,9 +44,14 @@ class ClientController extends Controller
     public function store(ClientRequest $request): JsonResponse
     {
         $data = $request->validated();
-        Gate::authorize('create', [Client::class, $data['active'] ?? true]);
 
-        $client = Client::create($data);
+        // Lock the office row so concurrent requests cannot exceed the plan's CNPJ limit.
+        $client = DB::transaction(function () use ($request, $data) {
+            Office::whereKey($request->user()->office_id)->lockForUpdate()->first();
+            Gate::authorize('create', [Client::class, $data['active'] ?? true]);
+
+            return Client::create($data);
+        });
         $this->syncBilling($request);
 
         return response()->json(['data' => $client], 201);
@@ -60,9 +67,12 @@ class ClientController extends Controller
     public function update(ClientRequest $request, Client $client): JsonResponse
     {
         $data = $request->validated();
-        Gate::authorize('update', [$client, (bool) ($data['active'] ?? false)]);
 
-        $client->update($data);
+        DB::transaction(function () use ($request, $client, $data) {
+            Office::whereKey($request->user()->office_id)->lockForUpdate()->first();
+            Gate::authorize('update', [$client, (bool) ($data['active'] ?? false)]);
+            $client->update($data);
+        });
         $this->syncBilling($request);
 
         return response()->json(['data' => $client]);

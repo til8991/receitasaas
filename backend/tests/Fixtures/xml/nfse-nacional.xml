@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NFSe xmlns="http://www.sped.fazenda.gov.br/nfse" versao="1.00">
+  <infNFSe Id="NFS43149022112223330001810000000000000127030000000001">
+    <nNFSe>1</nNFSe>
+    <dhProc>2027-03-05T14:00:00-03:00</dhProc>
+    <DPS versao="1.00">
+      <infDPS Id="DPS431490221122233300018100001000000000000001">
+        <dhEmi>2027-03-05T13:50:00-03:00</dhEmi>
+        <nDPS>1</nDPS>
+        <prest><CNPJ>11222333000181</CNPJ></prest>
+        <toma><CNPJ>19131243000197</CNPJ></toma>
+        <serv><cServ><cTribNac>010101</cTribNac><xDescServ>Consultoria em sistemas</xDescServ><cNBS>115011000</cNBS></cServ></serv>
+        <valores><vServPrest><vServ>5000.00</vServ></vServPrest></valores>
+        <IBSCBS><valores><trib><gIBSCBS><CST>000</CST><cClassTrib>000001</cClassTrib></gIBSCBS></trib></valores></IBSCBS>
+      </infDPS>
+    </DPS>
+  </infNFSe>
+</NFSe>

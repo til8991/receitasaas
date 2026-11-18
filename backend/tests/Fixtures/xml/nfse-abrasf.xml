@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompNfse xmlns="http://www.abrasf.org.br/nfse.xsd">
+  <Nfse><InfNfse>
+    <Numero>777</Numero><CodigoVerificacao>ABC123</CodigoVerificacao>
+    <DataEmissao>2027-01-20T10:00:00</DataEmissao>
+    <Servico><Valores><ValorServicos>1500.00</ValorServicos></Valores><Discriminacao>Manutencao</Discriminacao></Servico>
+    <PrestadorServico><IdentificacaoPrestador><Cnpj>11222333000181</Cnpj></IdentificacaoPrestador></PrestadorServico>
+    <TomadorServico><IdentificacaoTomador><CpfCnpj><Cpf>52998224725</Cpf></CpfCnpj></IdentificacaoTomador><Endereco><Uf>RS</Uf></Endereco></TomadorServico>
+  </InfNfse></Nfse>
+</CompNfse>
