@@ -51,11 +51,17 @@ class ComparadorService
 
         try {
             $result = $this->compute($client, $comparison);
-        } catch (InvalidArgumentException|CalculadoraException $e) {
+        } catch (InvalidArgumentException $e) {
+            // Business validation messages written by us, safe to show.
             $comparison->update(['status' => 'failed', 'error_message' => $e->getMessage()]);
-            if ($e instanceof CalculadoraException) {
-                report($e);
-            }
+
+            return $comparison;
+        } catch (CalculadoraException $e) {
+            report($e);
+            $comparison->update([
+                'status' => 'failed',
+                'error_message' => 'Calculadora oficial indisponível no momento ('.$e->calculadora.'). Tente novamente em instantes.',
+            ]);
 
             return $comparison;
         } catch (Throwable $e) {

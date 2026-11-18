@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -66,10 +67,25 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
+        $email = strtolower($data['email']);
+        $keyIp = 'login-fail:'.$email.'|'.$request->ip();   // brute force from one source
+        $keyEmail = 'login-fail:'.$email;                    // distributed brute force (soft, hourly)
+
+        if (RateLimiter::tooManyAttempts($keyIp, 5) || RateLimiter::tooManyAttempts($keyEmail, 50)) {
+            $seconds = max(RateLimiter::availableIn($keyIp), RateLimiter::availableIn($keyEmail));
+            throw ValidationException::withMessages([
+                'email' => "Muitas tentativas de login. Tente novamente em {$seconds} segundos.",
+            ])->status(429);
+        }
+
         $user = User::where('email', $data['email'])->first();
         if (! $user || ! Hash::check($data['password'], $user->password)) {
+            RateLimiter::hit($keyIp, 300);
+            RateLimiter::hit($keyEmail, 3600);
             throw ValidationException::withMessages(['email' => 'E-mail ou senha inválidos.']);
         }
+
+        RateLimiter::clear($keyIp);
 
         return response()->json($this->tokenPayload($user));
     }

@@ -77,7 +77,7 @@ class InvoiceImportService
                         $errors[] = ['arquivo' => $entryName, 'erro' => $e->getMessage()];
                     } catch (Throwable $e) {
                         $failed++;
-                        $errors[] = ['arquivo' => $entryName, 'erro' => 'Falha ao processar: '.$e->getMessage()];
+                        $errors[] = ['arquivo' => $entryName, 'erro' => 'Falha interna ao processar o arquivo.'];
                         report($e);
                     }
                 }

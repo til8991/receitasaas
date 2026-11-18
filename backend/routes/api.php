@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BatchController;
+use App\Http\Controllers\Api\BillingController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\CalculadoraController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ComparisonController;
@@ -13,6 +17,8 @@ Route::prefix('auth')->middleware('throttle:auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
 });
+
+Route::post('billing/webhook', [BillingController::class, 'webhook'])->middleware('throttle:60,1');
 
 Route::middleware(['auth:sanctum', 'tenant', 'throttle:api'])->group(function () {
     Route::get('auth/me', [AuthController::class, 'me']);
@@ -39,6 +45,18 @@ Route::middleware(['auth:sanctum', 'tenant', 'throttle:api'])->group(function ()
     Route::get('comparisons/{comparison}/audit/{scenario}', [ComparisonController::class, 'audit']);
     Route::post('comparisons/{comparison}/retry', [ComparisonController::class, 'retry'])->middleware('subscription');
     Route::delete('comparisons/{comparison}', [ComparisonController::class, 'destroy']);
+
+    // Batch, reports, dashboard
+    Route::get('batches', [BatchController::class, 'index']);
+    Route::post('batches', [BatchController::class, 'store'])->middleware('subscription');
+    Route::get('batches/{batch}', [BatchController::class, 'show']);
+    Route::post('batches/{batch}/reports', [ReportController::class, 'generateBatch']);
+    Route::get('comparisons/{comparison}/report', [ReportController::class, 'download']);
+    Route::get('dashboard', DashboardController::class);
+
+    // Plans / billing
+    Route::get('billing', [BillingController::class, 'show']);
+    Route::post('billing/subscribe', [BillingController::class, 'subscribe']);
 
     Route::prefix('calculadoras')->group(function () {
         Route::get('status', [CalculadoraController::class, 'status']);

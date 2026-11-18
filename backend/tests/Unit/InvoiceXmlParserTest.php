@@ -78,6 +78,13 @@ it('rejects XML with DOCTYPE (XXE)', function () {
     parseXml('xxe.xml');
 })->throws(InvoiceParseException::class, 'DOCTYPE');
 
+it('rejects a DOCTYPE hidden by UTF-16 encoding', function () {
+    $xml = file_get_contents(__DIR__.'/../Fixtures/xml/xxe.xml');
+    $utf16 = "\xFF\xFE".mb_convert_encoding(str_replace('<?xml version="1.0"?>', '<?xml version="1.0" encoding="UTF-16"?>', $xml), 'UTF-16LE', 'UTF-8');
+
+    (new InvoiceXmlParser)->parse($utf16);
+})->throws(InvoiceParseException::class);
+
 it('rejects unknown layouts and invalid XML', function () {
     expect(fn () => (new InvoiceXmlParser)->parse('<foo/>'))->toThrow(InvoiceParseException::class, 'Layout')
         ->and(fn () => (new InvoiceXmlParser)->parse('<foo'))->toThrow(InvoiceParseException::class, 'inválido');

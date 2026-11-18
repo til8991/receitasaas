@@ -28,12 +28,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::define('admin', fn (User $user) => $user->isAdmin());
 
-        // Per IP and per target account, so rotating IPs does not allow brute force on one e-mail.
-        RateLimiter::for('auth', fn (Request $request) => [
-            Limit::perMinute(10)->by('ip|'.$request->ip()),
-            Limit::perMinute(5)->by('email|'.strtolower((string) $request->input('email'))),
-            Limit::perHour(30)->by('email-h|'.strtolower((string) $request->input('email'))),
-        ]);
+        // Per-IP request limit. Failed logins are additionally counted per e-mail+IP and per e-mail
+        // (only failures, so an attacker cannot lock the real user out with a few requests) in AuthController.
+        RateLimiter::for('auth', fn (Request $request) => Limit::perMinute(20)->by('ip|'.$request->ip()));
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(240)->by($request->user()?->id ?: $request->ip()));
     }
 }

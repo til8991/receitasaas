@@ -29,13 +29,17 @@ class InvoiceXmlParser
         $dom = new DOMDocument;
         $previous = libxml_use_internal_errors(true);
         try {
-            $ok = $dom->loadXML($xml, LIBXML_NONET | LIBXML_NOBLANKS | LIBXML_COMPACT | LIBXML_PARSEHUGE);
+            $ok = $dom->loadXML($xml, LIBXML_NONET | LIBXML_NOBLANKS | LIBXML_COMPACT);
         } finally {
             libxml_clear_errors();
             libxml_use_internal_errors($previous);
         }
         if (! $ok) {
             throw new InvoiceParseException('XML inválido.');
+        }
+        // Checked again after decoding: the textual check above can be bypassed with other encodings (e.g. UTF-16).
+        if ($dom->doctype !== null) {
+            throw new InvoiceParseException('Arquivo com DOCTYPE (não suportado).');
         }
 
         $xp = new DOMXPath($dom);

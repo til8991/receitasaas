@@ -33,9 +33,12 @@ class ImportInvoicesJob implements ShouldQueue
 
     public function failed(?Throwable $e): void
     {
+        if ($e) {
+            report($e);
+        }
         InvoiceImport::withoutGlobalScopes()->whereKey($this->importId)->update([
             'status' => 'failed',
-            'errors' => json_encode([['arquivo' => '-', 'erro' => $e?->getMessage() ?? 'Falha desconhecida']]),
+            'errors' => json_encode([['arquivo' => '-', 'erro' => 'Falha ao processar a importação. Tente novamente.']]),
             'finished_at' => now(),
         ]);
     }
