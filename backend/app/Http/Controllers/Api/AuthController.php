@@ -68,11 +68,13 @@ class AuthController extends Controller
         ]);
 
         $email = strtolower($data['email']);
-        $keyIp = 'login-fail:'.$email.'|'.$request->ip();   // brute force from one source
-        $keyEmail = 'login-fail:'.$email;                    // distributed brute force (soft, hourly)
+        // Failed attempts are counted per e-mail + IP: blocks brute force from one source without letting
+        // a third party lock the real user out (no per-e-mail-only hard block). Plus the per-IP route limit.
+        // Future hardening: CAPTCHA after N failures.
+        $keyIp = 'login-fail:'.$email.'|'.$request->ip();
 
-        if (RateLimiter::tooManyAttempts($keyIp, 5) || RateLimiter::tooManyAttempts($keyEmail, 50)) {
-            $seconds = max(RateLimiter::availableIn($keyIp), RateLimiter::availableIn($keyEmail));
+        if (RateLimiter::tooManyAttempts($keyIp, 5)) {
+            $seconds = RateLimiter::availableIn($keyIp);
             throw ValidationException::withMessages([
                 'email' => "Muitas tentativas de login. Tente novamente em {$seconds} segundos.",
             ])->status(429);
@@ -81,7 +83,6 @@ class AuthController extends Controller
         $user = User::where('email', $data['email'])->first();
         if (! $user || ! Hash::check($data['password'], $user->password)) {
             RateLimiter::hit($keyIp, 300);
-            RateLimiter::hit($keyEmail, 3600);
             throw ValidationException::withMessages(['email' => 'E-mail ou senha inválidos.']);
         }
 

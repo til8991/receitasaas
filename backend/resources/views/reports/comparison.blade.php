@@ -114,6 +114,8 @@
 <ul style="margin: 0; padding-left: 14px">@foreach ($result['avisos'] as $w)<li>{{ $w }}</li>@endforeach</ul>
 @endif
 
+<div style="page-break-before: always"></div>
+<h1>Anexo — premissas e auditoria</h1>
 <h2>Premissas utilizadas</h2>
 <table class="grid small">
     <tr><th style="width: 8%">ID</th><th style="width: 42%">Premissa</th><th>Valor</th></tr>

@@ -33,7 +33,7 @@ class ComparisonReportService
             'versions' => $comparison->simulations->mapWithKeys(fn ($s) => [$s->scenario => $s->calculator_version]),
             'itemErrors' => $comparison->simulations->flatMap(fn ($s) => collect($s->item_errors ?? [])->map(fn ($e) => $e + ['cenario' => $s->scenario])),
             'disclaimer' => Disclaimer::TEXT,
-        ])->setPaper('a4');
+        ])->setPaper('a4')->setOption(['isFontSubsettingEnabled' => true, 'isRemoteEnabled' => false]);
 
         $path = "reports/{$office->id}/comparison-{$comparison->id}.pdf";
         Storage::disk(self::DISK)->put($path, $pdf->output());

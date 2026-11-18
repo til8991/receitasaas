@@ -391,17 +391,23 @@ class ComparadorService
                 ['id' => 'P-03', 'descricao' => 'Vendas B2B', 'valor' => $lines->source === 'manual'
                     ? number_format((float) ($client->b2b_sales_pct), 2, ',', '.').'% (cadastro/entrada manual)'
                     : 'Destinatário PJ nas notas importadas'],
-                ['id' => 'P-04', 'descricao' => $defs['credit_pass_through_pct']['label'], 'valor' => $p->creditPassThroughPct().'%'],
-                ['id' => 'P-05', 'descricao' => 'Transição do IBS no Simples (fração do ICMS/ISS)', 'valor' => (string) $p->simplesIbsTransition($year)],
-                ['id' => 'P-06', 'descricao' => "Alíquotas nominais {$year} (CBS / IBS UF / IBS Mun)", 'valor' => "{$nominal['cbs']}% / {$nominal['ibs_estadual']}% / {$nominal['ibs_municipal']}%"],
-                ['id' => 'P-07', 'descricao' => $defs['regular_suppliers_pct']['label'], 'valor' => $p->regularSuppliersPct().'%'],
+                ['id' => 'P-04', 'descricao' => $defs['credit_pass_through_pct']['label'], 'valor' => self::pct($p->creditPassThroughPct())],
+                ['id' => 'P-05', 'descricao' => 'Transição do IBS no Simples (fração do ICMS/ISS)', 'valor' => self::pct($p->simplesIbsTransition($year) * 100).' do ICMS/ISS do DAS'],
+                ['id' => 'P-06', 'descricao' => "Alíquotas nominais {$year} (CBS / IBS UF / IBS Mun)", 'valor' => implode(' / ', array_map(fn ($v) => self::pct((float) $v), [$nominal['cbs'], $nominal['ibs_estadual'], $nominal['ibs_municipal']]))],
+                ['id' => 'P-07', 'descricao' => $defs['regular_suppliers_pct']['label'], 'valor' => self::pct($p->regularSuppliersPct())],
                 ['id' => 'P-08', 'descricao' => 'Período de receitas usado como base do ano de referência', 'valor' => $lines->source === 'manual'
                     ? 'Valores informados'
                     : "{$lines->periodStart} a {$lines->periodEnd} (12 meses até a última nota de saída)"],
                 ['id' => 'P-09', 'descricao' => 'Classificação padrão para itens sem grupo IBSCBS', 'valor' => "CST {$client->default_cst} / cClassTrib {$client->default_c_class_trib}"],
-                ['id' => 'P-10', 'descricao' => $defs['recommendation_threshold_pct']['label'], 'valor' => $p->recommendationThresholdPct().'%'],
+                ['id' => 'P-10', 'descricao' => $defs['recommendation_threshold_pct']['label'], 'valor' => self::pct($p->recommendationThresholdPct())],
                 ['id' => 'P-11', 'descricao' => 'Crédito do adquirente de empresa do Simples = IBS/CBS recolhido no DAS', 'valor' => 'Sim'],
             ],
         ];
+    }
+
+    /** pt-BR percentage without useless trailing zeros: 8,8% / 0,05% / 50%. */
+    private static function pct(float $value): string
+    {
+        return rtrim(rtrim(number_format($value, 4, ',', '.'), '0'), ',').'%';
     }
 }
