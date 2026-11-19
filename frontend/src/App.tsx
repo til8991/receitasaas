@@ -1,8 +1,9 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { useAuth } from './auth/AuthContext'
 import { Layout } from './components/Layout'
 import { Loading } from './components/ui'
+import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
@@ -19,8 +20,10 @@ import Settings from './pages/Settings'
 
 function Protected({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth()
+  const location = useLocation()
   if (loading) return <div className="px-8"><Loading /></div>
-  if (!user) return <Navigate to="/entrar" replace />
+  // Visitors on "/" see the public landing page; any other private URL asks for login.
+  if (!user) return location.pathname === '/' ? <Landing /> : <Navigate to="/entrar" replace />
   return <>{children}</>
 }
 
